@@ -44,6 +44,10 @@ class Responder:
             match = re.search(pattern, text)
             if match:
                 replaced = match.expand(response)
+                if re.search(pattern, replaced):
+                    self.respond(
+                        channel, "Your rules will cause infinite loops, fix them! {}".format(pattern))
+                    break
                 self.respond(channel, replaced)
                 break
 

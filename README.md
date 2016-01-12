@@ -10,6 +10,9 @@ registered the API token.
 
 ## Usage:
 
+Create yourself a bot user, paste the token given to you into your config
+file (just copy the example.yaml), and run.
+
 ```
 python responder.py -c ./responder.yaml
 ```
@@ -25,9 +28,8 @@ See the `example.yaml` configuration file.
 ## Warning:
 
 Make sure your regex pattern properly excludes your response from matching,
-otherwise you'll get a nasty loop happening. I may add some checking to ensure
-the response doesn't match the initial pattern, but this is all at your own
-risk until then.
+otherwise you'll be told to fix your pattern. There's probably a better way
+of checking this (like detecting the username..) but I haven't looked too hard.
 
 ## Installation:
 
