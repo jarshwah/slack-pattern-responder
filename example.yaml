@@ -1,0 +1,10 @@
+---
+token: 'REPLACEME'
+team: 'REPLACEME'
+rules:
+  jira:
+    pattern: '[^\/\\](\b[A-Z]{2,6}-\d{1,4}\b)[^\/\\]'
+    response: 'http://domain.jira.com/jira/browse/\1'
+    rooms:
+      - 'general'
+      - 'random'
