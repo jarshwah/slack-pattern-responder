@@ -35,3 +35,9 @@ of checking this (like detecting the username..) but I haven't looked too hard.
 
 I'm not (yet) packaging this up, so I'm not providing any instructions. If you
 can figure it out, then you can probably use it without my help.
+
+## TODO:
+
+The script should probably write some logging output, so that we can see what's
+actually happening in the process. Errors will be written (if using the default
+upstart script), but no real standard output is ever written.
