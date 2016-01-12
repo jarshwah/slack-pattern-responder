@@ -1,6 +1,5 @@
 ---
 token: 'REPLACEME'
-team: 'REPLACEME'
 rules:
   jira:
     pattern: '(?:^|[^\/])(\b\w{3,6}-\d{1,4}\b)(?:[^\/]|$)'
