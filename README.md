@@ -1,4 +1,4 @@
-# slack-pattern-responder
+# slack_responder
 Monitors all messages for regex patterns and returns a corresponding message.
 I use this for turning ticket numbers into links.
 
@@ -14,11 +14,8 @@ Create yourself a bot user, paste the token given to you into your config
 file (just copy the example.yaml), and run.
 
 ```
-python responder.py -c ./responder.yaml
+python slack_responder.py -c ./responder.yaml
 ```
-
-You want to make sure you've installed the requirements into a virtualenv
-before running this though!
 
 ## Configuration:
 
@@ -38,6 +35,9 @@ can figure it out, then you can probably use it without my help.
 
 ## TODO:
 
-The script should probably write some logging output, so that we can see what's
-actually happening in the process. Errors will be written (if using the default
-upstart script), but no real standard output is ever written.
+- Docs
+- Way more tests
+- travis test integration
+- pypi
+- logging (click.echo)
+

@@ -7,8 +7,11 @@ import click
 import yaml
 from slackclient import SlackClient
 
+VERSION = (0, 1, 0)
+__version__ = '0.1.0'
 
-class Responder:
+
+class Responder(object):
 
     def __init__(self, config):
         self.config = config
@@ -40,14 +43,15 @@ class Responder:
     def parse_message(self, text, channel):
         rules = self.mapping[channel]
         for pattern, response in rules:
-            match = re.search(pattern, text)
-            if match:
-                replaced = match.expand(response)
-                if re.search(pattern, replaced):
-                    self.respond(
-                        channel, "Your rules will cause infinite loops, fix them! {}".format(pattern))
-                    break
-                self.respond(channel, replaced)
+            matches = re.finditer(pattern, text)
+            if matches:
+                for match in matches:
+                    replaced = match.expand(response)
+                    if re.search(pattern, replaced):
+                        self.respond(
+                            channel, "Your rules will cause infinite loops, fix them! {}".format(pattern))
+                        break
+                    self.respond(channel, replaced)
                 break
 
     def respond(self, channel, response):
@@ -76,11 +80,22 @@ class Responder:
 
 
 @click.command()
-@click.option(
-    '--config', '-c',
-    type=click.File(),
-    help='YAML configuration file location.')
+@click.argument('config', type=click.File())
 def cli(config):
+    """
+    Starts the responder bot with CONFIG yaml file defining a Slack
+    `token` and `rules`.
+
+    \b
+    The most basic config file would contain a token and a single rule:
+    \b
+    token: 'your-bots-slack-token'
+    rules:
+      jira:
+        pattern: '(?:^|[^\/])(\b[A-Z]{2,6}-\d{1,4}\b)(?:[^\/]|$)'
+        response: 'http://domain.jira.com/jira/browse/\1'
+
+    """
     parsed = yaml.safe_load(config)
     assert 'token' in parsed, "'token' does not exist in config file"
     assert 'rules' in parsed, "'rules' does not exist in config file"
