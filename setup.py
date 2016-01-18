@@ -10,7 +10,7 @@ setup(
     name='slack_responder',
     description='A slack bot that responds to regex patterns',
     long_description=long_desc,
-    version='0.1.0',
+    version='0.1.1',
     author='Josh Smeaton',
     author_email='josh.smeaton@gmail.com',
     url='https://github.com/jarshwah/slack-pattern-responder',
