@@ -1,2 +1,3 @@
-include READDME.md
+include README.md
 include LICENSE
+include MANIFEST.in
