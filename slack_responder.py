@@ -8,8 +8,8 @@ import click
 import yaml
 from slackclient import SlackClient
 
-VERSION = (0, 1, 2)
-__version__ = '0.1.2'
+VERSION = (0, 2, 0)
+__version__ = '0.2.0'
 
 
 class Responder(object):

@@ -1,3 +1,9 @@
+0.2.0 2016-01-19
+--------------
+* Bot will no longer respond to itself
+* Tests and examples include regex for properly handling multiple messages
+* Gained some very basic logging
+
 0.1.2 2016-01-19
 ----------------
 * Fixed README deployment
