@@ -1,3 +1,4 @@
+import datetime
 import re
 import sys
 import time
@@ -17,26 +18,33 @@ class Responder(object):
         self.config = config
         self.client = SlackClient(config['token'])
         self.mapping = defaultdict(list)
+        self.me = None
 
     def run(self):
         if self.client.rtm_connect():
+            self.me = self.whoami(self.client.server.username)
             self.gather_channel_mapping()
             while True:
                 self.process_messages(self.client.rtm_read())
                 time.sleep(1)
         else:
-            print("Connection failed. Is your token correct?")
-            sys.exit(1)
+            self._error("Connection failed. Is your token correct?")
 
     def process_messages(self, messages):
         for message in messages:
             if message.get('type') == 'message':
-                ts, text, channel = float(message['ts']), message['text'], message['channel']
+                ts, text, channel, user = (
+                    float(message['ts']), message['text'],
+                    message['channel'], message['user']
+                )
                 if channel not in self.mapping:
                     # Ignoring message in unmonitored channel
                     continue
-                if abs(ts - time.time()) > 60:
+                if abs(time.time() - ts) > 60:
                     # Ignoring old message
+                    continue
+                if user == self.me:
+                    # Ignore messages sent by me
                     continue
                 self.parse_message(text, channel)
 
@@ -47,15 +55,24 @@ class Responder(object):
             if matches:
                 for match in matches:
                     replaced = match.expand(response)
-                    if re.search(pattern, replaced):
-                        self.respond(
-                            channel, "Your rules will cause infinite loops, fix them! {}".format(pattern))
-                        break
+                    self._log("Matched '{}' with pattern: '{}'. Responding: {}".format(
+                        text, pattern, replaced
+                    ))
                     self.respond(channel, replaced)
                 break
 
     def respond(self, channel, response):
         self.client.rtm_send_message(channel, response)
+
+    def whoami(self, username):
+        """
+        Returns the ID for the provided `username`.
+        """
+        for user in self.client.server.users:
+            if user == username:
+                self._log("I am {} with id {}".format(username, user.id))
+                return user.id
+        self._error('Uh oh, couldn\'t determine bot user id from username: {}'.format(username))
 
     def gather_channel_mapping(self):
         """
@@ -77,6 +94,17 @@ class Responder(object):
                 for channel in channel_lookup.values():
                     self.mapping[channel].append(
                         (re.compile(rule['pattern']), rule['response']))
+
+    def _log(self, message, level='DEBUG'):
+        click.echo("{} - {} - {}".format(
+            datetime.datetime.utcnow(), level, message
+        ))
+
+    def _error(self, message):
+        click.secho("{} - {} - {}".format(
+            datetime.datetime.utcnow(), 'ERROR', message
+        ), fg='red')
+        sys.exit(1)
 
 
 @click.command()
