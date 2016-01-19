@@ -2,11 +2,14 @@
 Monitors all messages for regex patterns and returns a corresponding message.
 I use this for turning ticket numbers into links.
 
-## Work In Progress!
+## Installation:
 
-This is only toy code at the moment, as it's only my first time writing a
-slack integration. The responses will be sent under the name of whatever user
-registered the API token.
+`pip3 install slack_responder`
+
+## Configuration:
+
+See the `example.yaml` configuration file. Sorry, that's not a lot of help,
+but docs are on my todo list below :)
 
 ## Usage:
 
@@ -14,30 +17,15 @@ Create yourself a bot user, paste the token given to you into your config
 file (just copy the example.yaml), and run.
 
 ```
-python slack_responder.py -c ./responder.yaml
+slack_responder ./responder.yaml
 ```
 
-## Configuration:
-
-See the `example.yaml` configuration file.
-
-
-## Warning:
-
-Make sure your regex pattern properly excludes your response from matching,
-otherwise you'll be told to fix your pattern. There's probably a better way
-of checking this (like detecting the username..) but I haven't looked too hard.
-
-## Installation:
-
-I'm not (yet) packaging this up, so I'm not providing any instructions. If you
-can figure it out, then you can probably use it without my help.
+See `config/upstart.conf` for an example of running this as a service. Pay
+particular attention to the environment variables `LC_ALL` and `LANG` when
+running under python 3.
 
 ## TODO:
 
 - Docs
 - Way more tests
 - travis test integration
-- pypi
-- logging (click.echo)
-
