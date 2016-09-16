@@ -33,10 +33,15 @@ class Responder(object):
     def process_messages(self, messages):
         for message in messages:
             if message.get('type') == 'message':
-                ts, text, channel, user = (
-                    float(message['ts']), message['text'],
-                    message['channel'], message['user']
-                )
+                ts = float(message['ts'])
+                channel = message['channel']
+                if message.get('subtype') == 'message_changed':
+                    # there was an edit, so operate on the edited portion
+                    text = message.get('message')['text']
+                    user = message.get('message')['user']
+                else:
+                    text = message['text']
+                    user = message['user']
                 if channel not in self.mapping:
                     # Ignoring message in unmonitored channel
                     continue
