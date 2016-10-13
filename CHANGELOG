@@ -1,3 +1,8 @@
+1.0.1 2016-10-13
+----------------
+* Fixed a bug preventing multiple patterns from being defined. Thanks stacecom
+  for the report.
+
 1.0.0 2016-09-16
 ----------------
 * React correctly to edits by retrieving the text of the edit (used to crash)

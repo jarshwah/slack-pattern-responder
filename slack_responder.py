@@ -8,8 +8,8 @@ import click
 import yaml
 from slackclient import SlackClient
 
-VERSION = (1, 0, 0)
-__version__ = '1.0.0'
+VERSION = (1, 0, 1)
+__version__ = '1.0.1'
 
 
 class Responder(object):
@@ -64,7 +64,7 @@ class Responder(object):
                         text, pattern, replaced
                     ))
                     self.respond(channel, replaced)
-                break
+                continue
 
     def respond(self, channel, response):
         self.client.rtm_send_message(channel, response)
