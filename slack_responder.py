@@ -8,8 +8,8 @@ import click
 import yaml
 from slackclient import SlackClient
 
-VERSION = (1, 0, 1)
-__version__ = '1.0.1'
+VERSION = (1, 1, 0)
+__version__ = '1.1.0'
 
 
 class Responder(object):
@@ -73,11 +73,11 @@ class Responder(object):
         """
         Returns the ID for the provided `username`.
         """
-        for user in self.client.server.users:
-            if user == username:
-                self._log("I am {} with id {}".format(username, user.id))
-                return user.id
-        self._error('Uh oh, couldn\'t determine bot user id from username: {}'.format(username))
+        me = self.client.server.users.find(username)
+        if not me:
+            self._error('Uh oh, couldn\'t determine bot user id from username: {}'.format(username))
+        self._log("I am {} with id {}".format(username, me.id))
+        return me.id
 
     def gather_channel_mapping(self):
         """
@@ -134,6 +134,7 @@ def cli(config):
     assert 'rules' in parsed, "'rules' does not exist in config file"
     r = Responder(parsed)
     r.run()
+
 
 if __name__ == '__main__':
     cli()

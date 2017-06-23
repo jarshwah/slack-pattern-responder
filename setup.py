@@ -32,7 +32,7 @@ setup(
     install_requires=[
         'click',
         'pyyaml',
-        'slackclient'
+        'slackclient>=1.0.5'
     ],
     entry_points='''
         [console_scripts]

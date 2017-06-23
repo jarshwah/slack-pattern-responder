@@ -1,6 +1,5 @@
-import slack_responder
-
 import pytest
+import slack_responder
 from mocks import SlackClient
 
 config = {
@@ -83,3 +82,9 @@ def test_multiple_patterns():
     responses = (r.client.sent[0][1], r.client.sent[1][1])
     assert 'https://domain.jira.com/browse/ABC-123' in responses
     assert 'bar=F1-123456' in responses
+
+
+def test_find_user():
+    r = slack_responder.Responder(config)
+    assert r.client.rtm_connect(), "Could not connect"
+    assert r.whoami(r.client.server.username) == '123'
